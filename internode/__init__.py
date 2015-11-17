@@ -1,10 +1,6 @@
-import settings
 import requests
-import errno
 from xml.etree import ElementTree
 from datetime import datetime
-from json import dumps
-from os import path, makedirs
 
 
 def timestamp():
@@ -161,42 +157,3 @@ class Service:
             "history": self.history,
             "usage": self.usage
         }
-
-
-if __name__ == "__main__":
-
-    # Check if data directory exists
-    try:
-        makedirs(settings.EXPORT_DIRECTORY)
-    except OSError as exception:
-        if exception.errno != errno.EEXIST:
-            raise
-
-    # Create a new account instance
-    account = Account(settings.USERNAME, settings.PASSWORD)
-
-    # Prettify JSON output, making it more
-    # human-readable
-    json_kwargs = {
-        "sort_keys": True,
-        "indent": 4,
-        "separators": (',', ': ')
-    }
-
-    # Write-out list of services to JSON file
-    with open(path.join(settings.EXPORT_DIRECTORY, 'account.json'), 'wb') as f:
-        services = {}
-        for i in account.services.keys():
-            services[i] = "%s/%s.json" % (settings.EXPORT_DIRECTORY, i)
-
-        data = {
-            "generated": timestamp(),
-            "services": services
-        }
-        f.write(dumps(data, **json_kwargs))
-
-    # Write out each service as its own JSON fi;e
-    for id in account.services:
-        service = account.services[id]
-        with open(path.join(settings.EXPORT_DIRECTORY, '%s.json' % id), 'wb') as f:
-            f.write(dumps(service.dump(), **json_kwargs))
