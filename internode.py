@@ -40,12 +40,11 @@ class Api:
             http://docs.python-requests.org/en/latest/user/quickstart/#response-content
         """
         url = "%s/%s" % (self.host, url)
-
         response = requests.get(url, auth=self.auth)
 
         # It is possible for the server to return a 500 error,
         # but still respond with a valid body.
-        assert response.status_code != 401, "Request failed. Authorisation was missing or invalid."
+        assert response.status_code != 401, "Request failed. Authorization was missing or invalid."
         return ElementTree.fromstring(response.content)
 
 
