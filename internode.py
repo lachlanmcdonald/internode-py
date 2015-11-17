@@ -12,12 +12,33 @@ def timestamp():
 
 
 class Api:
+    """
+    Abstraction of the Internode API that automatically passes the provided
+    username and password with each request.
+    """
     host = "https://customer-webtools-api.internode.on.net/api/v1.5"
 
     def __init__(self, username, password):
+        """
+        Initializes Api with your Internode account username and password.
+
+        Args:
+            username: Username for your Internode account. (do not include
+                @internode.on.net)
+            password: Password for your Internode account.
+        """
         self.auth = (username, password)
 
     def get(self, url=""):
+        """
+        Sends a GET request to the Internode API.
+
+        Args:
+            url: Additional URL part. Appended to the Internode API URL.
+        Returns:
+            API response. See:
+            http://docs.python-requests.org/en/latest/user/quickstart/#response-content
+        """
         url = "%s/%s" % (self.host, url)
 
         response = requests.get(url, auth=self.auth)
@@ -29,13 +50,28 @@ class Api:
 
 
 class Account:
+    """
+    Represents an Internode account. An account owns one or more Services (e.g.
+    Home ADSL, Business ADSL, etc.).
+    """
     services = {}
 
     def __init__(self, username, password):
+        """
+        Initializes Account with your Internode account username and password.
+
+        Args:
+            username: Username for your Internode account. (do not include
+                @internode.on.net)
+            password: Password for your Internode account.
+        """
         self.api = Api(username, password)
         self.get_services()
 
     def get_services(self):
+        """
+        Retrieves all of the Services associated with this account.
+        """
         tree = self.api.get()
         services_tree = tree.find('api/services')
         assert services_tree is not None, "XML was not as expected"
@@ -48,6 +84,14 @@ class Account:
 
 class Service:
     def __init__(self, id, api):
+        """
+        Initializes Service.
+
+        Args:
+            id: Service ID
+            api: Instance of the Api class. The service ID must belong to an
+            Account with the username and password provided to the Api instance.
+        """
         self.id = id
         self.api = api
         self.get_service()
@@ -55,6 +99,9 @@ class Service:
         self.get_usage()
 
     def get_service(self):
+        """
+        Retrieves information about this service
+        """
         tree = self.api.get('/api/v1.5/api/v1.5/%s/service' % self.id)
         service_tree = tree.find('api/service')
         assert service_tree is not None, "XML was not as expected"
@@ -78,6 +125,9 @@ class Service:
             self.service["quota"] = int(self.service["quota"])
 
     def get_history(self):
+        """
+        Retrieves usage history for this service
+        """
         tree = self.api.get('/api/v1.5/api/v1.5/%s/history' % self.id)
         history_tree = tree.find('api/usagelist')
         assert history_tree is not None, "Response was not as expected and can not be processed further."
@@ -87,6 +137,9 @@ class Service:
             self.history[i.get('day')] = int(i[0].text)
 
     def get_usage(self):
+        """
+        Retrieves current usage information for this service
+        """
         tree = self.api.get('/api/v1.5/api/v1.5/%s/usage' % self.id)
         traffic_tree = tree.find('api/traffic')
         assert traffic_tree is not None, "Response was not as expected and can not be processed further."
@@ -99,6 +152,10 @@ class Service:
         self.usage['usage'] = int(traffic_tree.text)
 
     def dump(self):
+        """
+        Produce a simple representation of this class, which can be output to
+        a human-readable formats like JSON.
+        """
         return {
             "generated": timestamp(),
             "service": self.service,
