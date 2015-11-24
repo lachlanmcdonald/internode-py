@@ -47,9 +47,8 @@ Internode, like many ISPs, uses SI decimal values
 | Gigabyte | 1,000,000,000     |
 | Terabyte | 1,000,000,000,000 |
 
-Please note that on 32-bit systems, the maximum integer size is often far smaller than the bytes shown. Whilst 
-
 ## Wishlist
 
+- Add in functionality detailed by the official API specification
 - Python 2\3 compatibility
-- A nice static site which can display this information
+- A nice static site which can display the JSON output
