@@ -86,7 +86,8 @@ class Account:
 
         self.services = {}
         for element in services_tree:
-            self.services[element.text] = Service(int(element.text), self.api)
+            if element.get('type') == 'Personal_ADSL':
+                self.services[element.text] = Service(int(element.text), self.api)
         return self.services
 
 
