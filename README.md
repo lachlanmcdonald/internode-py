@@ -78,4 +78,5 @@ Internode, like many ISPs, uses SI decimal values
 
 - Add in functionality detailed by the official API specification
 - Python 2\3 compatibility
+- Write tests (difficult currently since the API does not provide a dummy account for testing)
 - A nice static site which can display the JSON output
