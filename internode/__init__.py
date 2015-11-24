@@ -65,7 +65,6 @@ class Account:
             password: Password for your Internode account.
         """
         self.api = Api(username, password)
-        self.get_services()
 
     def get_services(self):
         """
@@ -77,8 +76,9 @@ class Account:
         assert int(services_tree.get('count')) > 0, "There are no services for this account"
 
         self.services = {}
-        for i in services_tree:
-            self.services[i.text] = Service(int(i.text), self.api)
+        for element in services_tree:
+            self.services[element.text] = Service(int(element.text), self.api)
+        return self.services
 
 
 class Service:
@@ -93,9 +93,6 @@ class Service:
         """
         self.id = id
         self.api = api
-        self.get_service()
-        self.get_history()
-        self.get_usage()
 
     def get_service(self):
         """
@@ -122,6 +119,7 @@ class Service:
             self.service["id"] = int(self.service["id"])
         if "quota" in self.service:
             self.service["quota"] = int(self.service["quota"])
+        return self.service
 
     def get_history(self):
         """
@@ -134,6 +132,7 @@ class Service:
         self.history = {}
         for i in history_tree:
             self.history[i.get('day')] = int(i[0].text)
+        return self.history
 
     def get_usage(self):
         """
@@ -149,6 +148,7 @@ class Service:
 
         self.usage['quota'] = int(traffic_tree.get('quota'))
         self.usage['usage'] = int(traffic_tree.text)
+        return self.usage
 
     def dump(self):
         """
@@ -157,7 +157,7 @@ class Service:
         """
         return {
             "generated": timestamp(),
-            "service": self.service,
-            "history": self.history,
-            "usage": self.usage
+            "service": self.get_service(),
+            "history": self.get_history(),
+            "usage": self.get_usage()
         }

@@ -25,6 +25,9 @@ if __name__ == "__main__":
     # Create a new account instance
     account = Account(USERNAME, PASSWORD)
 
+    # Get services for the account
+    services = account.get_services()
+
     # Prettify JSON output, making it more
     # human-readable
     json_kwargs = {
@@ -35,18 +38,18 @@ if __name__ == "__main__":
 
     # Write-out list of services to JSON file
     with open(path.join(EXPORT_DIRECTORY, 'account.json'), 'wb') as f:
-        services = {}
-        for i in account.services.keys():
-            services[i] = "%s/%s.json" % (EXPORT_DIRECTORY, i)
+        output = {}
+        for service_id in services.keys():
+            output[service_id] = "%s/%s.json" % (EXPORT_DIRECTORY, service_id)
 
         data = {
             "generated": timestamp(),
-            "services": services
+            "services": output
         }
         f.write(dumps(data, **json_kwargs))
 
     # Write out each service as its own JSON file
-    for id in account.services:
-        service = account.services[id]
+    for id in services:
+        service = services[id]
         with open(path.join(EXPORT_DIRECTORY, '%s.json' % id), 'wb') as f:
             f.write(dumps(service.dump(), **json_kwargs))
