@@ -3,6 +3,8 @@ from xml.etree import ElementTree
 from datetime import datetime
 from platform import python_implementation, python_version
 
+PACKAGE_VERSION = '0.1.0'
+
 
 def timestamp():
     return str(datetime.utcnow().isoformat())
@@ -16,7 +18,7 @@ class Api:
     spec_version = '1.5'
     host = "https://customer-webtools-api.internode.on.net/api/v1.5"
     headers = {
-        'User-Agent': 'internode.py/0.0.1 (%s %s, api/%s)' % (python_implementation(), python_version(), spec_version),
+        'User-Agent': 'internode.py/%s (%s %s, api/%s)' % (PACKAGE_VERSION, python_implementation(), python_version(), spec_version),
     }
 
     def __init__(self, username, password):
@@ -30,7 +32,7 @@ class Api:
         """
         self.auth = (username, password)
 
-    def get(self, url=""):
+    def get(self, url="", **kwargs):
         """
         Sends a GET request to the Internode API.
 
@@ -41,7 +43,7 @@ class Api:
             http://docs.python-requests.org/en/latest/user/quickstart/#response-content
         """
         url = "%s/%s" % (self.host, url)
-        response = requests.get(url, auth=self.auth, headers=self.headers)
+        response = requests.get(url, auth=self.auth, headers=self.headers, **kwargs)
 
         # It is possible for the server to return a 500 error,
         # but still respond with a valid body.
@@ -122,17 +124,54 @@ class Service:
             self.service["quota"] = int(self.service["quota"])
         return self.service
 
-    def get_history(self):
+    def get_history(self, verbose=True):
         """
-        Retrieves usage history for this service
+        Retrieves usage history for this service.
+
+        Args:
+            verbose: When true, output will include a breakdown of the usage,
+            amount uploaded and downloaded, to both metered and non-metered
+            sources.
         """
-        tree = self.api.get('/api/v1.5/api/v1.5/%s/history' % self.id)
+        url = '/api/v1.5/api/v1.5/%s/history' % self.id
+        params = {
+            "verbose": int(verbose)
+        }
+        tree = self.api.get(url, params=params)
         history_tree = tree.find('api/usagelist')
         assert history_tree is not None, "Response was not as expected and can not be processed further."
 
         self.history = {}
-        for i in history_tree:
-            self.history[i.get('day')] = int(i[0].text)
+        for element in history_tree:
+            total = element.find('traffic[@name="total"]')
+
+            if verbose is True:
+                unmetered_up = element.find('traffic[@direction="up"][@name="unmetered"]')
+                unmetered_down = element.find('traffic[@direction="down"][@name="unmetered"]')
+                metered_up = element.find('traffic[@direction="up"][@name="metered"]')
+                metered_down = element.find('traffic[@direction="down"][@name="metered"]')
+
+            output = {}
+
+            if total is not None:
+                output['total'] = int(total.text)
+
+            if unmetered_up is not None or unmetered_down is not None:
+                output['unmetered'] = {}
+            if metered_up is not None or metered_down is not None:
+                output['metered'] = {}
+
+            if unmetered_up is not None:
+                output['unmetered']['up'] = int(unmetered_up.text)
+            if unmetered_down is not None:
+                output['unmetered']['down'] = int(unmetered_down.text)
+            if metered_up is not None:
+                output['metered']['up'] = int(metered_up.text)
+            if metered_down is not None:
+                output['metered']['down'] = int(metered_down.text)
+
+            self.history[element.get('day')] = output
+
         return self.history
 
     def get_usage(self):
