@@ -13,9 +13,10 @@ class Api:
     Abstraction of the Internode API that automatically passes the provided
     username and password with each request.
     """
+    spec_version = '1.5'
     host = "https://customer-webtools-api.internode.on.net/api/v1.5"
     headers = {
-        'User-Agent': 'internode.py/0.0.1 (%s %s)' % (python_implementation(), python_version()),
+        'User-Agent': 'internode.py/0.0.1 (%s %s, api/%s)' % (python_implementation(), python_version(), spec_version),
     }
 
     def __init__(self, username, password):
