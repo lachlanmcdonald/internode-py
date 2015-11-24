@@ -101,7 +101,7 @@ class Service:
         """
         Retrieves information about this service
         """
-        tree = self.api.get('/api/v1.5/api/v1.5/%s/service' % self.id)
+        tree = self.api.get('/%s/service' % self.id)
         service_tree = tree.find('api/service')
         assert service_tree is not None, "XML was not as expected"
 
@@ -133,11 +133,9 @@ class Service:
             amount uploaded and downloaded, to both metered and non-metered
             sources.
         """
-        url = '/api/v1.5/api/v1.5/%s/history' % self.id
-        params = {
+        tree = self.api.get('/%s/history' % self.id, params={
             "verbose": int(verbose)
-        }
-        tree = self.api.get(url, params=params)
+        })
         history_tree = tree.find('api/usagelist')
         assert history_tree is not None, "Response was not as expected and can not be processed further."
 
@@ -178,7 +176,7 @@ class Service:
         """
         Retrieves current usage information for this service
         """
-        tree = self.api.get('/api/v1.5/api/v1.5/%s/usage' % self.id)
+        tree = self.api.get('/%s/usage' % self.id)
         traffic_tree = tree.find('api/traffic')
         assert traffic_tree is not None, "Response was not as expected and can not be processed further."
 
