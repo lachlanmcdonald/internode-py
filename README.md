@@ -3,14 +3,14 @@
 Python script for retrieving your Internode account usage and outputting as JSON
 files.
 
-__Work in progress__.  
+__Work in progress__.
 This script was created by studying [cafuego/internode-php](https://github.com/cafuego/internode-php).
-There is no guarantee that it is functional for all account types. Please raise 
+There is no guarantee that it is functional for all account types. Please raise
 an issue or pull-request if you encounter problems.
 
 ## Setup
 
-Install the required packages with _pip_ (_virtualenv_ is recommended)    
+Install the required packages with _pip_ (_virtualenv_ is recommended)
 
 ```pip install -r requirements.txt```
 
@@ -32,6 +32,22 @@ of each of the aforementioned files.
 By default, JSON files are output to the `data` directory in the script's
 working-directory. If this directory does not exist, the script will attempt to
 create it.
+
+## Units
+
+All units are output as bytes.
+
+Internode, like many ISPs, uses SI decimal values
+— 1,000 bytes per kilobyte (instead of 1,024). To ensure your output matches your understanding of your service, please refer to the table below:
+
+| Unit     | Bytes             |
+| -------- | ----------------- |
+| Kilobyte | 1,000             |
+| Megabyte | 1,000,000         |
+| Gigabyte | 1,000,000,000     |
+| Terabyte | 1,000,000,000,000 |
+
+Please note that on 32-bit systems, the maximum integer size is often far smaller than the bytes shown. Whilst 
 
 ## Wishlist
 
