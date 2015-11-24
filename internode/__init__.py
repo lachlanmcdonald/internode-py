@@ -45,10 +45,16 @@ class Api:
         url = "%s/%s" % (self.host, url)
         response = requests.get(url, auth=self.auth, headers=self.headers, **kwargs)
 
-        # It is possible for the server to return a 500 error,
-        # but still respond with a valid body.
-        assert response.status_code != 401, "Request failed. Authorization was missing or invalid."
-        return ElementTree.fromstring(response.content)
+        # Handle missing or invalid authentication
+        assert response.status_code != 401, "Request failed. Authentication was missing or invalid."
+
+        # It seems possible for the server to respond with a 500 status code,
+        # but still send a valid body. This checks that an error message was not
+        # encountered.
+        tree = ElementTree.fromstring(response.content)
+        error_message = tree.find('error/msg')
+        assert error_message is None, "Request failed. Server responded with an error: %s" % error_message.text
+        return tree
 
 
 class Account:
