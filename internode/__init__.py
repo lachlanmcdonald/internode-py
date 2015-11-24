@@ -1,6 +1,7 @@
 import requests
 from xml.etree import ElementTree
 from datetime import datetime
+from platform import python_implementation, python_version
 
 
 def timestamp():
@@ -13,6 +14,9 @@ class Api:
     username and password with each request.
     """
     host = "https://customer-webtools-api.internode.on.net/api/v1.5"
+    headers = {
+        'User-Agent': 'internode.py/0.0.1 (%s %s)' % (python_implementation(), python_version()),
+    }
 
     def __init__(self, username, password):
         """
@@ -36,7 +40,7 @@ class Api:
             http://docs.python-requests.org/en/latest/user/quickstart/#response-content
         """
         url = "%s/%s" % (self.host, url)
-        response = requests.get(url, auth=self.auth)
+        response = requests.get(url, auth=self.auth, headers=self.headers)
 
         # It is possible for the server to return a 500 error,
         # but still respond with a valid body.
