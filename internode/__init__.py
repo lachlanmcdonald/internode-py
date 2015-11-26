@@ -149,8 +149,6 @@ class Service:
         self.history = {}
         for element in history_tree:
             total = element.find('traffic[@name="total"]')
-
-            if verbose is True:
                 unmetered_up = element.find('traffic[@direction="up"][@name="unmetered"]')
                 unmetered_down = element.find('traffic[@direction="down"][@name="unmetered"]')
                 metered_up = element.find('traffic[@direction="up"][@name="metered"]')
