@@ -8,51 +8,49 @@ USERNAME = "username"
 PASSWORD = "password"
 EXPORT_DIRECTORY = "data"
 
+# Timestamp will be added to indicate when the
+# JSON files are generated
+TIMESTAMP = str(datetime.utcnow().isoformat())
 
-def timestamp():
-    return str(datetime.utcnow().isoformat())
+# Check if data directory exists
+try:
+    makedirs(EXPORT_DIRECTORY)
+except OSError as exception:
+    if exception.errno != errno.EEXIST:
+        raise
 
+# Create a new account instance
+account = Account(USERNAME, PASSWORD)
 
-if __name__ == "__main__":
+# Get services for the account
+services = account.get_services()
 
-    # Check if data directory exists
-    try:
-        makedirs(EXPORT_DIRECTORY)
-    except OSError as exception:
-        if exception.errno != errno.EEXIST:
-            raise
+# Prettify JSON output, making it more
+# human-readable
+json_kwargs = {
+    "sort_keys": True,
+    "indent": 4,
+    "separators": (',', ': ')
+}
 
-    # Create a new account instance
-    account = Account(USERNAME, PASSWORD)
+# Write-out list of services to JSON file
+with open(path.join(EXPORT_DIRECTORY, 'account.json'), 'wb') as f:
+    output = {}
 
-    # Get services for the account
-    services = account.get_services()
+    for service_id in services.keys():
+        output[service_id] = "%s/%s.json" % (EXPORT_DIRECTORY, service_id)
 
-    # Prettify JSON output, making it more
-    # human-readable
-    json_kwargs = {
-        "sort_keys": True,
-        "indent": 4,
-        "separators": (',', ': ')
+    data = {
+        "generated": TIMESTAMP,
+        "services": output
     }
-
-    # Write-out list of services to JSON file
-    with open(path.join(EXPORT_DIRECTORY, 'account.json'), 'wb') as f:
-        output = {}
-        for service_id in services.keys():
-            output[service_id] = "%s/%s.json" % (EXPORT_DIRECTORY, service_id)
-
-        data = {
-            "generated": timestamp(),
-            "services": output
-        }
-        f.write(dumps(data, **json_kwargs))
+    f.write(dumps(data, **json_kwargs))
 
     # Write out each service as its own JSON file
     for id, service in services.iteritems():
         with open(path.join(EXPORT_DIRECTORY, '%s.json' % id), 'wb') as f:
             data = {
-                "generated": timestamp(),
+                "generated": TIMESTAMP,
                 "service": service.get_service(),
                 "history": service.get_history(verbose=True, days=90),
                 "usage": service.get_usage()
