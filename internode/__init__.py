@@ -131,7 +131,7 @@ class Service:
             self.service["quota"] = int(self.service["quota"])
         return self.service
 
-    def get_history(self, verbose=True):
+    def get_history(self, verbose=False):
         """
         Retrieves usage history for this service.
 
@@ -149,10 +149,10 @@ class Service:
         self.history = {}
         for element in history_tree:
             total = element.find('traffic[@name="total"]')
-                unmetered_up = element.find('traffic[@direction="up"][@name="unmetered"]')
-                unmetered_down = element.find('traffic[@direction="down"][@name="unmetered"]')
-                metered_up = element.find('traffic[@direction="up"][@name="metered"]')
-                metered_down = element.find('traffic[@direction="down"][@name="metered"]')
+            unmetered_up = element.find('traffic[@direction="up"][@name="unmetered"]')
+            unmetered_down = element.find('traffic[@direction="down"][@name="unmetered"]')
+            metered_up = element.find('traffic[@direction="up"][@name="metered"]')
+            metered_down = element.find('traffic[@direction="down"][@name="metered"]')
 
             output = {}
 
