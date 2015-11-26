@@ -12,7 +12,7 @@ services = account.get_services()
 
 # Loop over each service
 for id, service in services.iteritems():
-    history = service.get_history(verbose=True)
+    history = service.get_history(days=30, verbose=True)
 
     # Create CSV file named after the service ID
     with open('%s.csv' % id, 'wb') as f:
