@@ -1,7 +1,6 @@
 # internode.py
 
 Python package for retrieving your Internode account information and usage and additional script to output these as JSON or CSV files.
-files.
 
 ## Setup
 
@@ -34,7 +33,7 @@ By default, JSON files are output to the `data` directory in the script's
 working-directory. If this directory does not exist, the script will attempt to
 create it.
 
-### CSV
+#### CSV
 
 Add your username and password to `export_csv.py` by replacing the `USERNAME` and
 `PASSWORD` variables with your Internode account details (do not include
