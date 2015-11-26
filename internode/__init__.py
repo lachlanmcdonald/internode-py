@@ -3,7 +3,7 @@ from xml.etree import ElementTree
 from datetime import datetime
 from platform import python_implementation, python_version
 
-PACKAGE_VERSION = '0.1.1'
+PACKAGE_VERSION = '0.1.2'
 
 
 def timestamp():
