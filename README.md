@@ -16,7 +16,7 @@ simply import the `internode` package and interact with the classes directly.
 Two scripts have been provided to help you your account information and usage history.
 
 - `export.py` exports account information and usage as individual JSON files.
-- `export.csv` exports usage as individual CSV files.
+- `export_csv.py` exports usage as individual CSV files.
 
 #### JSON
 
