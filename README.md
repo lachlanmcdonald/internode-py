@@ -15,14 +15,14 @@ simply import the `internode` package and interact with the classes directly.
 
 Two scripts have been provided to help you your account information and usage history.
 
-- `export.py` exports account information and usage as individual JSON files.
+- `export_json.py` exports account information and usage as individual JSON files.
 - `export_csv.py` exports usage as individual CSV files.
 
 #### JSON
 
-Add your username and password to `export.py` by replacing the `USERNAME` and
+Add your username and password to `export_json.py` by replacing the `USERNAME` and
 `PASSWORD` variables with your Internode account details (do not include
-`@internode.on.net`), then execute by running `python export.py`.
+`@internode.on.net`), then execute by running `python export_json.py`.
 
 - Each service tied to your account is output as a JSON file, named after your
 service ID. i.e. `1234567.json`.
@@ -43,7 +43,7 @@ Add your username and password to `export_csv.py` by replacing the `USERNAME` an
 
 ### `service` properties
 
-These properties are retrived when calling `get_service()` on a `Service` instance. These properties are also output in each service's JSON file by `export.py`.
+These properties are retrived when calling `get_service()` on a `Service` instance. These properties are also output in each service's JSON file by `export_json.py`.
 
 | Property                 | Description                                                                                                                                                      |
 | ------------------------ | -----                                                                                                                                                            |
@@ -63,7 +63,7 @@ These properties are retrived when calling `get_service()` on a `Service` instan
 
 ### `usage` properties
 
-A small number of properties from the above table are output by calling `get_usage()` on a `Service` instance. These properties are also output in each service's JSON file by `export.py`.
+A small number of properties from the above table are output by calling `get_usage()` on a `Service` instance. These properties are also output in each service's JSON file by `export_json.py`.
 
 
 ## Units
