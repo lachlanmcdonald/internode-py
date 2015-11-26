@@ -1,32 +1,44 @@
 # internode.py
 
-Python package for retrieving your Internode account information and usage and additional script to output these as JSON
+Python package for retrieving your Internode account information and usage and additional script to output these as JSON or CSV files.
 files.
 
 ## Setup
 
-Install the required packages with _pip_. _virtualenv_ is highly recommended.
+Install the required packages with _pip_. [Virtualenv](https://virtualenv.readthedocs.org/en/latest/) is highly recommended.
 
 ```pip install -r requirements.txt```
+
+To write your own script to handle your account information, you can
+simply import the `internode` package and interact with the classes directly.
+
+## Example Scripts
+
+Two scripts have been provided to help you your account information and usage history.
+
+- `export.py` exports account information and usage as individual JSON files.
+- `export.csv` exports usage as individual CSV files.
+
+#### JSON
 
 Add your username and password to `export.py` by replacing the `USERNAME` and
 `PASSWORD` variables with your Internode account details (do not include
 `@internode.on.net`), then execute by running `python export.py`.
 
-If you want to write your own script to handle your account information, you can
-simply import the `internode` package and interact with the classes directly.
-
-## Output
-
-Each service tied to your account is output as a JSON file, named after your
+- Each service tied to your account is output as a JSON file, named after your
 service ID. i.e. `1234567.json`.
-
-An additional JSON file, `account.json`, is also generated that contains a list
+- An additional JSON file, `account.json`, is also generated that contains a list
 of each of the aforementioned files.
 
 By default, JSON files are output to the `data` directory in the script's
 working-directory. If this directory does not exist, the script will attempt to
 create it.
+
+### CSV
+
+Add your username and password to `export_csv.py` by replacing the `USERNAME` and
+`PASSWORD` variables with your Internode account details (do not include
+`@internode.on.net`), then execute by running `python export_csv.py`.
 
 ## Properties
 
