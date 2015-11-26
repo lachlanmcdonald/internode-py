@@ -1,12 +1,7 @@
 # internode.py
 
-Python script for retrieving your Internode account usage and outputting as JSON
+Python package for retrieving your Internode account information and usage and additional script to output these as JSON
 files.
-
-__Work in progress__.
-This script was created by studying [cafuego/internode-php](https://github.com/cafuego/internode-php).
-There is no guarantee that it is functional for all account types. Please raise
-an issue or pull-request if you encounter problems.
 
 ## Setup
 
