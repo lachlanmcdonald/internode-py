@@ -3,7 +3,7 @@ from xml.etree import ElementTree
 from datetime import datetime
 from platform import python_implementation, python_version
 
-PACKAGE_VERSION = '0.1.2'
+PACKAGE_VERSION = '0.1.3'
 
 
 def timestamp():
@@ -199,15 +199,3 @@ class Service:
         self.usage['quota'] = int(traffic_tree.get('quota'))
         self.usage['usage'] = int(traffic_tree.text)
         return self.usage
-
-    def dump(self):
-        """
-        Produce a simple representation of this class, which can be output to
-        a human-readable formats like JSON.
-        """
-        return {
-            "generated": timestamp(),
-            "service": self.get_service(),
-            "history": self.get_history(),
-            "usage": self.get_usage()
-        }

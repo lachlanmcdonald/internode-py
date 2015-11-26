@@ -49,7 +49,12 @@ if __name__ == "__main__":
         f.write(dumps(data, **json_kwargs))
 
     # Write out each service as its own JSON file
-    for id in services:
-        service = services[id]
+    for id, service in services.iteritems():
         with open(path.join(EXPORT_DIRECTORY, '%s.json' % id), 'wb') as f:
-            f.write(dumps(service.dump(), **json_kwargs))
+            data = {
+                "generated": timestamp(),
+                "service": service.get_service(),
+                "history": service.get_history(verbose=True, days=90),
+                "usage": service.get_usage()
+            }
+            f.write(dumps(data, **json_kwargs))
