@@ -131,7 +131,7 @@ class Service:
             self.service["quota"] = int(self.service["quota"])
         return self.service
 
-    def get_history(self, verbose=False):
+    def get_history(self, days=None, verbose=False):
         """
         Retrieves usage history for this service.
 
@@ -139,10 +139,17 @@ class Service:
             verbose: When true, output will include a breakdown of the usage,
             amount uploaded and downloaded, to both metered and non-metered
             sources.
+            days: Number of days of history to include.
         """
-        tree = self.api.get('/%s/history' % self.id, params={
+        params = {
             "verbose": int(verbose)
-        })
+        }
+
+        if days is not None:
+            days = int(days) + 1
+            params["count"] = days
+
+        tree = self.api.get('/%s/history' % self.id, params=params)
         history_tree = tree.find('api/usagelist')
         assert history_tree is not None, "Response was not as expected and can not be processed further."
 
