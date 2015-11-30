@@ -2,8 +2,9 @@ import requests
 from xml.etree import ElementTree
 from datetime import datetime
 from platform import python_implementation, python_version
+from collections import OrderedDict
 
-PACKAGE_VERSION = '0.1.3'
+PACKAGE_VERSION = '0.1.4'
 
 
 def timestamp():
@@ -153,7 +154,7 @@ class Service:
         history_tree = tree.find('api/usagelist')
         assert history_tree is not None, "Response was not as expected and can not be processed further."
 
-        self.history = {}
+        self.history = OrderedDict()
         for element in history_tree:
             total = element.find('traffic[@name="total"]')
             unmetered_up = element.find('traffic[@direction="up"][@name="unmetered"]')
