@@ -1,24 +1,25 @@
 # internode.py
 
-Python package for retrieving your Internode account information and usage and additional script to output these as JSON or CSV files.
+Python module for retrieving your Internode account information and usage and additional script to output these as JSON or CSV files.
 
 ## Setup
 
-Install the required packages with _pip_. [Virtualenv](https://virtualenv.readthedocs.org/en/latest/) is highly recommended.
+_Note_: This module is not yet setup to use setuptools or pip. To install, you will only need a copy of the `internode` folder.
+
+Install the required dependencies with _pip_. [Virtualenv](https://virtualenv.readthedocs.org/en/latest/) is highly recommended.
 
 ```pip install -r requirements.txt```
 
-To write your own script to handle your account information, you can
-simply import the `internode` package and interact with the classes directly.
+To write your own script to handle your account information, you can simply import the `internode` package and interact with the classes directly.
 
-## Example Scripts
+## Examples
 
-Two scripts have been provided to help you your account information and usage history.
+Two scripts have been provided to help you retrieve your account information and usage history:
 
 - `export_json.py` exports account information and usage as individual JSON files.
 - `export_csv.py` exports usage as individual CSV files.
 
-#### JSON
+#### `export_json.py`
 
 Add your username and password to `export_json.py` by replacing the `USERNAME` and
 `PASSWORD` variables with your Internode account details (do not include
@@ -33,7 +34,7 @@ By default, JSON files are output to the `data` directory in the script's
 working-directory. If this directory does not exist, the script will attempt to
 create it.
 
-#### CSV
+#### `export_csv.py`
 
 Add your username and password to `export_csv.py` by replacing the `USERNAME` and
 `PASSWORD` variables with your Internode account details (do not include
@@ -85,4 +86,3 @@ Internode, like many ISPs, uses SI decimal values
 - Add in functionality detailed by the official API specification
 - Python 2\3 compatibility
 - Write tests (difficult currently since the API does not provide a dummy account for testing)
-- A nice static site which can display the JSON output
